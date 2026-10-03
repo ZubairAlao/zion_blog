@@ -1,0 +1,8 @@
+### TEST GET / HOME
+GET http://localhost:3000/
+
+
+### POST REGISTER USER /auth/register
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+

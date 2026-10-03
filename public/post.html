@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zion Blog | Post</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="site-header">
+
+        <div class="header-group">
+          <div class="header-top">
+            <a class="logo" href="/">Zion Blog</a>
+          </div>
+      
+          <nav class="main-nav" id="nav-auth"">
+            
+          </nav>
+    
+        </div>
+    
+    
+      </header>
+    
+      <main class="page">
+        <section>
+          <div id="singlePostMessage"></div>
+            <div id="singlePost"></div>
+        </section>
+
+        <section>
+          <form id="create-comment-form" class="comment-form" method="POST">         
+          </form>
+    
+          <div id="createPostMessage"></div>
+        </section>
+
+        <section>
+          <h3>Comments</h3>
+          <div id="postComments"></div>
+        </section>
+    
+      </main>
+
+    <script type="module" src="/js/single-post.js"></script>
+    <script type="module" src="/js/comments.js"></script>
+</body>
+</html>

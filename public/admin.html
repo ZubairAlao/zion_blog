@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Admin Dashboard</title>
+
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+
+  <header class="site-header">
+
+    <div class="header-group">
+      <div class="header-top">
+        <a class="logo" href="/"> Zion Blog</a>
+      </div>
+
+      <nav class="main-nav">
+        <span>Welcome <strong id="headerUsername">Guest</strong></span>
+
+        <a href="/profile.html">Edit Profile</a>
+        <a href="/create-post.html">Create Post</a>
+        <a href="/change-password.html">Change Password</a>
+        <a class="nav-link" href="/forgot-password.html">Forgot Password</a>
+        <button id="logoutBtn" class="btn"><span class="btn-label">Logout</span></button>
+      </nav>
+
+    </div>
+
+  </header>
+
+
+  <main>
+
+    <!-- USERS -->
+
+    <section>
+      <h2>Users</h2>
+
+      <div id="usersMessage"></div>
+
+      <div class="table-container">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Verified</th>
+              <th>Posts</th>
+              <th>Comments</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <tbody id="usersTable">
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+
+    <!-- POSTS -->
+
+    <section>
+      <h2>Posts</h2>
+
+      <div id="postsMessage"></div>
+
+      <div class="table-container">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Published</th>
+              <th>Comments</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <tbody id="postsTable">
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+
+    <!-- COMMENTS -->
+
+    <section>
+      <h2>Comments</h2>
+
+      <div id="commentsMessage"></div>
+
+      <div class="table-container">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Author</th>
+              <th>Comment</th>
+              <th>Post</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <tbody id="commentsTable">
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <script type="module" src="./js/admin.js"></script>
+
+</body>
+</html>

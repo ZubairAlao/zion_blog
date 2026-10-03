@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>My Profile | Zion Blog</title>
+  <meta name="description" content="Manage your Zion Blog account: update your details, verify your email and change your password.">
+
+  <!-- Private page: keep it out of search engines -->
+  <meta name="robots" content="noindex, nofollow">
+
+  <meta name="application-name" content="Zion Blog">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="color-scheme" content="light dark">
+
+  <!-- Placeholder emoji favicon. Replace with a real /favicon.ico and /apple-touch-icon.png before launch -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📝</text></svg>">
+
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+  <header class="site-header">
+
+    <div class="header-group">
+      <div class="header-top">
+        <a class="logo" href="/"> Zion Blog</a>
+      </div>
+
+      <nav class="main-nav">
+        <span>Welcome <strong id="headerUsername">Guest</strong></span>
+
+        <a href="/profile.html">Edit Profile</a>
+        <a href="/create-post.html">Create Post</a>
+        <a href="/change-password.html">Change Password</a>
+        <a href="/admin.html">Admin</a>
+        <a class="nav-link" href="/forgot-password.html">Forgot Password</a>
+        <button id="logoutBtn" class="btn"><span class="btn-label">Logout</span></button>
+      </nav>
+
+    </div>
+
+  </header>
+
+
+  <main class="page profile-container">
+
+    <!-- for toggling tabs -->
+    <div class="tabs">
+      <button class="tab active" data-profile-section="accountInformation"><span class="icon" aria-hidden="true">📋</span> Account Information</button>
+      <button class="tab" data-profile-section="updateProfile"><span class="icon" aria-hidden="true">✏️</span> Update Profile</button>
+      <button class="tab" data-profile-section="emailVerification"><span class="icon" aria-hidden="true">📧</span> Email Verification</button>
+      <button class="tab" data-profile-section="changePassword"><span class="icon" aria-hidden="true">🔒</span> Change Password</button>
+      <button class="tab" data-profile-section="deleteAccount"><span class="icon" aria-hidden="true">🗑️</span> Delete Account</button>
+    </div>
+
+    <!-- ACCOUNT INFORMATION -->
+
+    <section id="accountInformation" class="profile-section active">
+      <h2>Account Information</h2>
+      <div id="profileMessage"></div>
+
+      <div class="profile-info">
+        <p>
+          <strong>Username:</strong>
+          <span id="usernameDisplay">Loading...</span>
+        </p>
+
+        <p>
+          <strong>Email:</strong>
+          <span id="emailDisplay">Loading...</span>
+        </p>
+
+        <p>
+          <strong>Role:</strong>
+          <span id="roleDisplay">Loading...</span>
+        </p>
+
+        <p>
+          <strong>Email verification:</strong>
+          <span id="verificationDisplay">Loading...</span>
+        </p>
+
+        <p>
+          <strong>Posts:</strong>
+          <span id="postsCount">0</span>
+        </p>
+
+        <p>
+          <strong>Comments:</strong>
+          <span id="commentsCount">0</span>
+        </p>
+
+        <div>
+          <h2>Posts</h2>
+          <div id="postList"></div>
+          <p id="postsMessage"></p>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- UPDATE PROFILE -->
+
+    <section id="updateProfile" class="profile-section">
+
+      <h2>Update Profile</h2>
+
+      <form class="form" id="usernameEditForm" style="margin: 10px 0;">
+
+        <div>
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" autocomplete="username" required>
+        </div>
+
+        <button type="submit"><span class="icon" aria-hidden="true">💾</span> <span class="btn-label">Save Changes</span></button>
+
+      </form>
+      <form class="form" id="emailEditForm" style="margin: 0;">
+
+        <div>
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" autocomplete="email" required>
+        </div>
+
+        <button type="submit"><span class="icon" aria-hidden="true">💾</span> <span class="btn-label">Save Changes</span></button>
+
+      </form>
+
+      <p id="profileFormMessage" role="status"></p>
+
+    </section>
+
+
+    <!-- EMAIL VERIFICATION -->
+    <section id="emailVerification" class="profile-section">
+      <h2>Email Verification</h2>
+      <p id="emailVerificationText">
+        Checking verification status...
+      </p>
+
+      <button id="verifyEmailBtn"><span class="icon" aria-hidden="true">📨</span> <span class="btn-label">Send Verification Email</span></button>
+      <p id="verificationMessage" role="status"></p>
+    </section>
+
+
+    <!-- CHANGE PASSWORD -->
+
+    <section id="changePassword" class="profile-section">
+
+      <h2>Change Password</h2>
+
+      <form class="form" id="passwordForm">
+
+        <div>
+          <label for="currentPassword">Current Password</label>
+          <input type="password" id="currentPassword" name="currentPassword" autocomplete="current-password" required>
+        </div>
+
+        <div>
+          <label for="newPassword">New Password</label>
+          <input type="password" id="newPassword" name="newPassword" autocomplete="new-password" required>
+        </div>
+
+        <div>
+          <label for="confirmPassword">Confirm New Password</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" autocomplete="new-password" required>
+        </div>
+
+        <button type="submit"><span class="icon" aria-hidden="true">🔄</span> <span class="btn-label">Change Password</span></button>
+      </form>
+
+      <p id="passwordMessage" role="status"></p>
+
+    </section>
+
+    <!-- DANGER ZONE -->
+
+    <section id="deleteAccount" class="profile-section danger-zone">
+
+      <h2><span class="icon" aria-hidden="true">⚠️</span> Danger Zone</h2>
+
+      <p>
+        Deleting your account is permanent.
+        Your posts, comments and authentication data
+        will also be deleted.
+      </p>
+
+      <button id="deleteAccountBtn">
+        <span class="icon" aria-hidden="true">🗑️</span> <span class="btn-label">Delete My Account</span>
+      </button>
+
+    </section>
+
+  </main>
+
+  <script type="module" src="./js/profile.js"></script>
+  <script type="module" src="./js/auth.js"></script>
+
+</body>
+</html>

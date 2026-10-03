@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Zion Blog | Edit Post</title>
+</head>
+<body>
+  <header class="site-header">
+
+    <div class="header-group">
+      <div class="header-top">
+        <a class="logo" href="/">Zion Blog</a>
+      </div>
+  
+      <nav class="main-nav">
+        <span> Welcome <strong id="usernameDisplay">Guest, </strong></span>
+        
+        <a href="/profile.html">Edit Profile</a>
+        <a href="/dashboard.html">Dashboard</a>
+        <a href="/change-password.html">Change Password</a>
+        <a class="nav-link" href="/forgot-password.html">Forgot Password</a>         
+      
+      <button id="logoutBtn" class="btn">Logout</button>
+      </nav>
+
+    </div>
+
+
+  </header>
+
+      <main class="page">
+
+        <section>
+    
+          <h2>Edit Post</h2>
+          <form id="edit-post-form" class="create-post-form" method="POST">
+
+            <input type="text" name="title" id="title" placeholder="Title" required>
+          
+            <textarea name="content" id="content" placeholder="Edit your post..." required></textarea>
+          
+            <button class="auth-btn" id="editPostBtn" type="submit">Edit Post</button>
+          </form>
+    
+          <div id="editPostMessage"></div>
+        </section>
+    
+      </main>
+
+      <script type="module" src="/js/nav.js"></script>
+      <script type="module" src="/js/edit-post.js"></script>
+</body>
+</html>
