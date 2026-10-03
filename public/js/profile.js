@@ -91,7 +91,7 @@ async function loadProfile() {
     if (!postsResponse.ok) {
 
       if (postsResponse.status === 401) {
-        window.location.href = "./login.html";
+        window.location.href = "./login";
         return;
       }
 
@@ -105,7 +105,7 @@ async function loadProfile() {
 
       <a
         class="post-title"
-        href="/post.html?slug=${encodeURIComponent(post.slug)}"
+        href="/post?slug=${encodeURIComponent(post.slug)}"
       >
         ${escapeHTML(post.title)}
       </a>
@@ -124,7 +124,7 @@ async function loadProfile() {
     if (!response.ok) {
 
       if (response.status === 401) {
-        window.location.href = "./login.html";
+        window.location.href = "./login";
         return;
       }
 
@@ -433,7 +433,7 @@ passwordForm.addEventListener(
 
       passwordForm.reset();
       setTimeout(() => {
-        window.location.href = "/login.html";
+        window.location.href = "/login";
       }, 1000);
 
     } catch (error) {
@@ -512,7 +512,7 @@ deleteAccountBtn.addEventListener(
 
 
       window.location.href =
-        "./index.html";
+        "/";
 
     } catch (error) {
 
@@ -550,7 +550,7 @@ logoutBtn.addEventListener(
       );
 
       window.location.href =
-        "./index.html";
+        "/";
     }
   }
 );

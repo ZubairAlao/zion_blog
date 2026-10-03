@@ -28,7 +28,7 @@ createPostForm?.addEventListener("submit", async (event) => {
       return;
     }
 
-    window.location.href = "/dashboard.html";
+    window.location.href = "/dashboard";
   } catch (error) {
     console.error(error);
     createPostMessage.textContent = "Something went wrong. Please try again.";

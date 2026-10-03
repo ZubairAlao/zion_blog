@@ -272,7 +272,7 @@ logoutBtn.addEventListener("click", async () => {
   } finally {
     sessionStorage.removeItem("accessToken");
 
-    window.location.href = "./index.html";
+    window.location.href = "/";
   }
 });
 

@@ -27,8 +27,7 @@ export async function renderSinglePost() {
   
     try {  
   
-      const params = new URLSearchParams(window.location.search);
-      const slug = params.get("slug");
+      const slug = window.location.pathname.split("/").filter(Boolean).pop();
   
       if (!slug) {
         throw new Error("Post not found.");
@@ -50,7 +49,7 @@ export async function renderSinglePost() {
 
             <a
               class="edit-post"
-              href="/edit-post.html?slug=${encodeURIComponent(post.slug)}"
+              href="/edit-post/${encodeURIComponent(post.slug)}"
             >
               Edit
             </a>
@@ -322,18 +321,18 @@ async function renderNav() {
 function renderLoggedout() {
   navAuth.innerHTML = `
     <span> Welcome <strong>Guest, </strong></span>
-    <a class="nav-link" href="/login.html">Login</a>
-    <a class="nav-link" href="/register.html">Register</a>
+    <a class="nav-link" href="/login">Login</a>
+    <a class="nav-link" href="/register">Register</a>
   `
 }
 
 function renderLoggedin(user) {
   navAuth.innerHTML = `
     <span> Welcome <strong id="usernameDisplay">${user.username}, </strong></span>
-    <a href="/profile.html">Edit Profile</a>
-    <a href="/create-post.html">Create Post</a>
-    <a href="/change-password.html">Change Password</a>
-    <a class="nav-link" href="/forgot-password.html">Forgot Password</a>
+    <a href="/profile">Edit Profile</a>
+    <a href="/create-post">Create Post</a>
+    <a href="/change-password">Change Password</a>
+    <a class="nav-link" href="/forgot-password">Forgot Password</a>
     <button id="logoutBtn" class="btn">Logout</button>
   `
   const logoutBtn = document.getElementById("logoutBtn");

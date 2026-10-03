@@ -6,8 +6,10 @@ const editPostBtn = document.querySelector("#editPostBtn");
   
 async function renderSinglePost() {    
     try {  
-    const params = new URLSearchParams(window.location.search);
-    const slug = params.get("slug");
+      const slug = window.location.pathname
+      .split("/")
+      .filter(Boolean)
+      .pop();
 
     if (!slug) {
         throw new Error("Post not found.");
@@ -74,7 +76,7 @@ editPostForm?.addEventListener("submit", async (event) => {
       return;
     }
 
-    window.location.href = `/post.html?slug=${result.slug}`
+    window.location.href = `/post?slug=${result.slug}`
   } catch (error) {
     console.error(error);
     editPostMessage.textContent = "Something went wrong. Please try again.";

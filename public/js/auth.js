@@ -115,7 +115,7 @@ if (verifyEmailBtn) {
       verifyEmailBtn.textContent = "Verified";
 
       setTimeout(() => {
-        window.location.href = "/login.html";
+        window.location.href = "/login";
       }, 1000);
 
     } catch (error) {
@@ -261,7 +261,7 @@ if (changePasswordForm) {
       sessionStorage.removeItem("accessToken");
 
       setTimeout(() => {
-        window.location.href = "/login.html";
+        window.location.href = "/login";
       }, 1000);
 
     } catch (error) {
@@ -422,7 +422,7 @@ if (resetPasswordForm) {
 
         setTimeout(() => {
           window.location.href =
-            "/login.html";
+            "/login";
         }, 1500);
 
       } catch (error) {

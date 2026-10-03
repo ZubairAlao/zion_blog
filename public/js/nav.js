@@ -11,7 +11,7 @@ async function loadUser() {
     if (response.status === 401) {
       sessionStorage.removeItem("accessToken");
 
-      window.location.href = "/login.html";
+      window.location.href = "/login";
 
       return null;
     }

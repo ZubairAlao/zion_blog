@@ -68,15 +68,15 @@ async function renderPublicPosts() {
     publicPosts.innerHTML = data.map((post) => {
 
       const authorUrl = user?.id === post.authorId
-        ? "/profile.html"
-        : `/users.html?user=${encodeURIComponent(post.author.username)}`;
+        ? "/profile"
+        : `/users/${encodeURIComponent(post.author.username)}`;
 
       return `
         <article class="post-card">
 
           <a
             class="post-title"
-            href="/post.html?slug=${encodeURIComponent(post.slug)}"
+            href="/post/${encodeURIComponent(post.slug)}"
           >
             ${escapeHTML(post.title)}
           </a>
@@ -127,18 +127,18 @@ async function renderNav() {
 function renderLoggedout() {
   navAuth.innerHTML = `
     <span> Welcome <strong>Guest, </strong></span>
-    <a class="nav-link" href="/login.html">Login</a>
-    <a class="nav-link" href="/register.html">Register</a>
+    <a class="nav-link" href="/login">Login</a>
+    <a class="nav-link" href="/register">Register</a>
   `
 }
 
 function renderLoggedin(user) {
   navAuth.innerHTML = `
     <span> Welcome <strong id="usernameDisplay">${user.username}, </strong></span>
-    <a href="/profile.html">Edit Profile</a>
-    <a href="/create-post.html">Create Post</a>
-    <a href="/change-password.html">Change Password</a>
-    <a class="nav-link" href="/forgot-password.html">Forgot Password</a>
+    <a href="/profile">Edit Profile</a>
+    <a href="/create-post">Create Post</a>
+    <a href="/change-password">Change Password</a>
+    <a class="nav-link" href="/forgot-password">Forgot Password</a>
     <button id="logoutBtn" class="btn">Logout</button>
   `
   const logoutBtn = document.getElementById("logoutBtn");
