@@ -4,6 +4,7 @@ import { api } from "./api.js";
 const usersTable = document.querySelector("#usersTable");
 const postsTable = document.querySelector("#postsTable");
 const commentsTable = document.querySelector("#commentsTable");
+const headerUsername = document.querySelector("#headerUsername")
 
 const logoutBtn = document.querySelector("#logoutBtn");
 
@@ -23,6 +24,38 @@ function makeRow(cells, actionButton = null) {
   }
 
   return row;
+}
+
+async function loadAdmin() {
+
+  try {
+    const response =
+      await api("/api/users/me");
+
+    const data =
+      await response.json();
+
+
+    if (!response.ok) {
+
+      if (response.status === 401) {
+        window.location.href = "./login";
+        return;
+      }
+
+      throw new Error(
+        data.message ||
+        "Failed to load profile"
+      );
+    }
+
+
+    headerUsername.textContent = data.username;
+
+  } catch (error) {
+
+    console.error(error);
+  }
 }
 
 async function loadUsers() {
@@ -280,3 +313,4 @@ logoutBtn.addEventListener("click", async () => {
 loadUsers();
 loadPosts();
 loadComments();
+loadAdmin()

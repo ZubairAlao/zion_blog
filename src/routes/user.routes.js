@@ -4,7 +4,7 @@ import {
   getMe,
   getUserProfile,
   getMyPosts,
-  updateProfile
+  updateEmail, updateUsername
 } from "../controllers/user.controller.js";
 
 
@@ -26,11 +26,11 @@ router.get(
   getMyPosts
 );
 
-router.patch(
-  "/me",
-  requireAuth,
-  updateProfile
-);
+router.patch("/me/username",requireAuth,
+  updateUsername,  updateUsername);
+
+router.patch("/me/email", requireAuth,
+  updateEmail,  updateEmail);
 
 // Public author profile
 router.get(

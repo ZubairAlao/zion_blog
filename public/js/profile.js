@@ -10,11 +10,60 @@ const headerUsername = document.querySelector("#headerUsername");
 const postList = document.querySelector("#postList");
 const postsMessage = document.querySelector("#postsMessage");
 
+const emailDisplay = document.querySelector("#emailDisplay");
+const roleDisplay = document.querySelector("#roleDisplay");
+const verificationDisplay = document.querySelector("#verificationDisplay");
+
+const postsCount = document.querySelector("#postsCount");
+const commentsCount = document.querySelector("#commentsCount");
+
+const usernameInput = document.querySelector("#username");
+const emailInput = document.querySelector("#email");
+const emailCurrentPassword = document.querySelector("#emailCurrentPassword");
+
+const usernameEditForm = document.querySelector("#usernameEditForm");
+const emailEditForm = document.querySelector("#emailEditForm");
+
+const editUsernameBtn = document.querySelector("#editUsernameBtn");
+const saveUsernameBtn = document.querySelector("#saveUsernameBtn");
+
+const editEmailBtn = document.querySelector("#editEmailBtn");
+const saveEmailBtn = document.querySelector("#saveEmailBtn");
+
+const profileFormMessage = document.querySelector("#profileFormMessage");
+
+const emailVerificationText =
+  document.querySelector("#emailVerificationText");
+
+const verifyEmailBtn =
+  document.querySelector("#verifyEmailBtn");
+
+const verificationMessage =
+  document.querySelector("#verificationMessage");
+
+const passwordForm =
+  document.querySelector("#passwordForm");
+
+const passwordMessage =
+  document.querySelector("#passwordMessage");
+
+const deleteAccountBtn =
+  document.querySelector("#deleteAccountBtn");
+
+const logoutBtn =
+  document.querySelector("#logoutBtn");
+
+
+// ===============================
+// UTILITY FUNCTIONS
+// ===============================
+
 function escapeHTML(str) {
-  const div = document.createElement('div');
-  div.textContent = str ?? '';
+  const div = document.createElement("div");
+  div.textContent = str ?? "";
   return div.innerHTML;
 }
+
 
 function formatDate(date) {
   return new Date(date).toLocaleDateString("en-GB", {
@@ -25,55 +74,94 @@ function formatDate(date) {
 }
 
 
-const emailDisplay = document.querySelector("#emailDisplay");
+// ===============================
+// PROFILE EDIT STATE
+// ===============================
 
-const roleDisplay = document.querySelector("#roleDisplay");
+function enableUsernameEditing() {
 
-const verificationDisplay = document.querySelector("#verificationDisplay");
+  usernameInput.disabled = false;
+  saveUsernameBtn.disabled = false;
 
-const postsCount = document.querySelector("#postsCount");
+  editUsernameBtn.disabled = true;
 
-const commentsCount = document.querySelector("#commentsCount");
+  usernameInput.focus();
 
-const usernameInput = document.querySelector("#username");
+  profileFormMessage.textContent = "";
+}
 
-const emailInput = document.querySelector("#email");
 
-const usernameEditForm = document.querySelector("#usernameEditForm");
-const emailEditForm = document.querySelector("#emailEditForm");
+function disableUsernameEditing() {
 
-const profileFormMessage = document.querySelector("#profileFormMessage");
+  usernameInput.disabled = true;
+  saveUsernameBtn.disabled = true;
 
-const emailVerificationText = document.querySelector("#emailVerificationText");
+  editUsernameBtn.disabled = false;
+}
 
-const verifyEmailBtn = document.querySelector("#verifyEmailBtn");
 
-const verificationMessage = document.querySelector("#verificationMessage");
+function enableEmailEditing() {
 
-const passwordForm = document.querySelector("#passwordForm");
+  emailInput.disabled = false;
+  emailCurrentPassword.disabled = false;
 
-const passwordMessage = document.querySelector("#passwordMessage");
+  saveEmailBtn.disabled = false;
 
-const deleteAccountBtn = document.querySelector("#deleteAccountBtn");
+  editEmailBtn.disabled = true;
 
-const logoutBtn = document.querySelector("#logoutBtn");
+  emailInput.focus();
 
-// toggleing tabs
+  profileFormMessage.textContent = "";
+}
+
+
+function disableEmailEditing() {
+
+  emailInput.disabled = true;
+  emailCurrentPassword.disabled = true;
+
+  saveEmailBtn.disabled = true;
+
+  editEmailBtn.disabled = false;
+
+  emailCurrentPassword.value = "";
+}
+
+
+// ===============================
+// TABS
+// ===============================
+
 const tabs = document.querySelectorAll(".tabs .tab");
-const profileSections = document.querySelectorAll(".profile-section");
+const profileSections =
+  document.querySelectorAll(".profile-section");
+
 
 tabs.forEach(tab => {
+
   tab.addEventListener("click", () => {
-    const target = document.getElementById(tab.dataset.profileSection);
+
+    const target =
+      document.getElementById(
+        tab.dataset.profileSection
+      );
+
     if (!target) return;
 
-    tabs.forEach(t => t.classList.remove("active"));
-    profileSections.forEach(s => s.classList.remove("active"));
+    tabs.forEach(t =>
+      t.classList.remove("active")
+    );
+
+    profileSections.forEach(section =>
+      section.classList.remove("active")
+    );
 
     tab.classList.add("active");
     target.classList.add("active");
   });
+
 });
+
 
 // ===============================
 // LOAD CURRENT USER
@@ -83,11 +171,16 @@ async function loadProfile() {
 
   try {
 
-    // get loggedin user post
-    const postsResponse = await api("/api/users/me/posts");
-    const postsData = await postsResponse.json();
-    console.log("post data of loggedin users", postsData);
-    
+    // ===============================
+    // LOAD USER POSTS
+    // ===============================
+
+    const postsResponse =
+      await api("/api/users/me/posts");
+
+    const postsData =
+      await postsResponse.json();
+
     if (!postsResponse.ok) {
 
       if (postsResponse.status === 401) {
@@ -96,31 +189,55 @@ async function loadProfile() {
       }
 
       throw new Error(
-        postsData.message || "Failed to load user posts"
+        postsData.message ||
+        "Failed to load user posts"
       );
     }
 
-    postList.innerHTML = postsData.map((post) => `
-    <article class="post-card">
 
-      <a
-        class="post-title"
-        href="/post?slug=${encodeURIComponent(post.slug)}"
-      >
-        ${escapeHTML(post.title)}
-      </a>
+    if (postsData.length === 0) {
 
-      <div class="post-meta">
-        <span>${formatDate(post.createdAt)}</span>
-        <span>${post._count.comments} comments</span>
-      </div>
+      postList.innerHTML = "";
 
-    </article>
-  `).join("");
+      postsMessage.textContent =
+        "You have not created any posts yet.";
+
+    } else {
+
+      postsMessage.textContent = "";
+
+      postList.innerHTML =
+        postsData.map(post => `
+          <article class="post-card">
+
+            <a
+              class="post-title"
+              href="/post/${encodeURIComponent(post.slug)}"
+            >
+              ${escapeHTML(post.title)}
+            </a>
+
+            <div class="post-meta">
+              <span>${formatDate(post.createdAt)}</span>
+              <span>${post._count.comments} comments</span>
+            </div>
+
+          </article>
+        `).join("");
+    }
 
 
-    const response = await api("/api/users/me");
-    const data = await response.json();
+    // ===============================
+    // LOAD PROFILE
+    // ===============================
+
+    const response =
+      await api("/api/users/me");
+
+    const data =
+      await response.json();
+
+
     if (!response.ok) {
 
       if (response.status === 401) {
@@ -129,18 +246,25 @@ async function loadProfile() {
       }
 
       throw new Error(
-        data.message || "Failed to load profile"
+        data.message ||
+        "Failed to load profile"
       );
     }
 
-    usernameDisplay.textContent = data.username;
-    headerUsername.textContent = data.username;
-    console.log("profile", data);
-    
 
-    emailDisplay.textContent = data.email;
+    // Account information
 
-    roleDisplay.textContent = data.role;
+    usernameDisplay.textContent =
+      data.username;
+
+    headerUsername.textContent =
+      data.username;
+
+    emailDisplay.textContent =
+      data.email;
+
+    roleDisplay.textContent =
+      data.role;
 
     verificationDisplay.textContent =
       data.emailVerified
@@ -155,24 +279,40 @@ async function loadProfile() {
       data._count?.comments ?? 0;
 
 
-    usernameInput.value = data.username;
+    // Update form values
 
-    emailInput.value = data.email;
+    usernameInput.value =
+      data.username;
 
+    emailInput.value =
+      data.email;
+
+
+    // Always start locked
+
+    disableUsernameEditing();
+    disableEmailEditing();
+
+
+    // ===============================
+    // EMAIL VERIFICATION
+    // ===============================
 
     if (data.emailVerified) {
 
       emailVerificationText.textContent =
         "Your email address is verified.";
 
-      verifyEmailBtn.style.display = "none";
+      verifyEmailBtn.style.display =
+        "none";
 
     } else {
 
       emailVerificationText.textContent =
         "Your email address is not verified.";
 
-      verifyEmailBtn.style.display = "inline-block";
+      verifyEmailBtn.style.display =
+        "inline-block";
     }
 
   } catch (error) {
@@ -180,133 +320,278 @@ async function loadProfile() {
     console.error(error);
 
     profileFormMessage.textContent =
-      error.message || "Something went wrong.";
+      error.message ||
+      "Something went wrong.";
   }
 }
 
 
 // ===============================
-// UPDATE PROFILE
+// EDIT USERNAME
 // ===============================
 
+editUsernameBtn.addEventListener(
+  "click",
+  () => {
 
+    enableUsernameEditing();
 
-emailEditForm.addEventListener(
-  "submit",
-  async (event) => {
-
-    event.preventDefault();
-
-
-    profileFormMessage.textContent =
-      "Updating...";
-
-
-    const email =
-      emailInput.value.trim();
-
-
-    try {
-
-      const response = await api(
-        "/api/users/me",
-        {
-          method: "PATCH",
-
-          body: JSON.stringify({
-            email
-          })
-        }
-      );
-
-
-      const data = await response.json();
-
-
-      if (!response.ok) {
-
-        profileFormMessage.textContent =
-          data.message ||
-          "Failed to update profile";
-
-        return;
-      }
-
-
-      profileFormMessage.textContent =
-        data.message;
-
-
-      // Refresh displayed account information
-      await loadProfile();
-
-    } catch (error) {
-
-      console.error(error);
-
-      profileFormMessage.textContent =
-        "Something went wrong.";
-    }
   }
 );
 
+
+// ===============================
+// UPDATE USERNAME
+// ===============================
+
 usernameEditForm.addEventListener(
   "submit",
-  async (event) => {
+  async event => {
 
     event.preventDefault();
-
-
-    profileFormMessage.textContent =
-      "Updating...";
-
 
     const username =
       usernameInput.value.trim();
 
+
+    if (!username) {
+
+      profileFormMessage.textContent =
+        "Username is required.";
+
+      return;
+    }
+
+
+    saveUsernameBtn.disabled = true;
+    editUsernameBtn.disabled = true;
+
+    saveUsernameBtn.querySelector(
+      ".btn-label"
+    ).textContent = "Updating...";
+
+    profileFormMessage.textContent =
+      "Updating username...";
+
+
     try {
 
-      const response = await api(
-        "/api/users/me",
-        {
-          method: "PATCH",
+      const response =
+        await api(
+          "/api/users/me/username",
+          {
+            method: "PATCH",
 
-          body: JSON.stringify({
-            username
-          })
-        }
-      );
+            body: JSON.stringify({
+              username
+            })
+          }
+        );
 
 
-      const data = await response.json();
+      const data =
+        await response.json();
 
 
       if (!response.ok) {
 
         profileFormMessage.textContent =
           data.message ||
-          "Failed to update profile";
+          "Failed to update username.";
+
+        saveUsernameBtn.disabled = false;
+        editUsernameBtn.disabled = true;
+
+        saveUsernameBtn.querySelector(
+          ".btn-label"
+        ).textContent = "Save Changes";
 
         return;
       }
 
 
       profileFormMessage.textContent =
-        data.message;
+        data.message ||
+        "Username updated successfully.";
+
+      saveUsernameBtn.querySelector(
+        ".btn-label"
+      ).textContent = "Saved";
 
 
-      // Refresh displayed account information
       await loadProfile();
+
+
+      setTimeout(() => {
+
+        saveUsernameBtn.querySelector(
+          ".btn-label"
+        ).textContent = "Save Changes";
+
+        disableUsernameEditing();
+
+      }, 1000);
+
 
     } catch (error) {
 
       console.error(error);
 
       profileFormMessage.textContent =
-        "Something went wrong.";
+        "Something went wrong. Please try again.";
+
+      saveUsernameBtn.disabled = false;
+      editUsernameBtn.disabled = true;
+
+      saveUsernameBtn.querySelector(
+        ".btn-label"
+      ).textContent = "Save Changes";
     }
+
   }
 );
+
+
+// ===============================
+// EDIT EMAIL
+// ===============================
+
+editEmailBtn.addEventListener(
+  "click",
+  () => {
+
+    enableEmailEditing();
+
+  }
+);
+
+
+// ===============================
+// UPDATE EMAIL
+// ===============================
+
+emailEditForm.addEventListener(
+  "submit",
+  async event => {
+
+    event.preventDefault();
+
+    const email =
+      emailInput.value.trim();
+
+    const currentPassword =
+      emailCurrentPassword.value;
+
+
+    if (!email) {
+
+      profileFormMessage.textContent =
+        "Email is required.";
+
+      return;
+    }
+
+
+    if (!currentPassword) {
+
+      profileFormMessage.textContent =
+        "Current password is required.";
+
+      emailCurrentPassword.focus();
+
+      return;
+    }
+
+
+    saveEmailBtn.disabled = true;
+    editEmailBtn.disabled = true;
+
+    saveEmailBtn.querySelector(
+      ".btn-label"
+    ).textContent = "Updating...";
+
+    profileFormMessage.textContent =
+      "Updating email...";
+
+
+    try {
+
+      const response =
+        await api(
+          "/api/users/me/email",
+          {
+            method: "PATCH",
+
+            body: JSON.stringify({
+              email,
+              currentPassword
+            })
+          }
+        );
+
+
+      const data =
+        await response.json();
+
+
+      if (!response.ok) {
+
+        profileFormMessage.textContent =
+          data.message ||
+          "Failed to update email.";
+
+        saveEmailBtn.disabled = false;
+        editEmailBtn.disabled = true;
+
+        saveEmailBtn.querySelector(
+          ".btn-label"
+        ).textContent = "Save Changes";
+
+        return;
+      }
+
+
+      profileFormMessage.textContent =
+        data.message ||
+        "Email updated successfully.";
+
+      saveEmailBtn.querySelector(
+        ".btn-label"
+      ).textContent = "Saved";
+
+
+      await loadProfile();
+
+
+      setTimeout(() => {
+
+        saveEmailBtn.querySelector(
+          ".btn-label"
+        ).textContent = "Save Changes";
+
+        disableEmailEditing();
+
+      }, 1000);
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      profileFormMessage.textContent =
+        "Something went wrong. Please try again.";
+
+      saveEmailBtn.disabled = false;
+      editEmailBtn.disabled = true;
+
+      saveEmailBtn.querySelector(
+        ".btn-label"
+      ).textContent = "Save Changes";
+    }
+
+  }
+);
+
 
 // ===============================
 // SEND VERIFICATION EMAIL
@@ -316,28 +601,43 @@ verifyEmailBtn.addEventListener(
   "click",
   async () => {
 
+    verifyEmailBtn.disabled = true;
+
+    verifyEmailBtn.querySelector(
+      ".btn-label"
+    ).textContent = "Sending...";
+
     verificationMessage.textContent =
       "Sending verification email...";
 
 
     try {
 
-      const response = await api(
-        "/api/auth/send-verification",
-        {
-          method: "POST"
-        }
-      );
+      const response =
+        await api(
+          "/api/auth/send-verification",
+          {
+            method: "POST"
+          }
+        );
 
 
-      const data = await response.json();
+      const data =
+        await response.json();
 
 
       if (!response.ok) {
 
         verificationMessage.textContent =
           data.message ||
-          "Failed to send verification email";
+          "Failed to send verification email.";
+
+        verifyEmailBtn.disabled = false;
+
+        verifyEmailBtn.querySelector(
+          ".btn-label"
+        ).textContent =
+          "Send Verification Email";
 
         return;
       }
@@ -347,13 +647,26 @@ verifyEmailBtn.addEventListener(
         data.message ||
         "Verification email sent.";
 
+      verifyEmailBtn.querySelector(
+        ".btn-label"
+      ).textContent = "Email Sent";
+
+
     } catch (error) {
 
       console.error(error);
 
       verificationMessage.textContent =
-        "Something went wrong.";
+        "Something went wrong. Please try again.";
+
+      verifyEmailBtn.disabled = false;
+
+      verifyEmailBtn.querySelector(
+        ".btn-label"
+      ).textContent =
+        "Send Verification Email";
     }
+
   }
 );
 
@@ -364,13 +677,15 @@ verifyEmailBtn.addEventListener(
 
 passwordForm.addEventListener(
   "submit",
-  async (event) => {
+  async event => {
 
     event.preventDefault();
 
 
-    passwordMessage.textContent =
-      "Changing password...";
+    const submitBtn =
+      passwordForm.querySelector(
+        'button[type="submit"]'
+      );
 
 
     const currentPassword =
@@ -398,29 +713,48 @@ passwordForm.addEventListener(
     }
 
 
+    submitBtn.disabled = true;
+
+    submitBtn.querySelector(
+      ".btn-label"
+    ).textContent = "Changing...";
+
+    passwordMessage.textContent =
+      "Changing password...";
+
+
     try {
 
-      const response = await api(
-        "/api/auth/change-password",
-        {
-          method: "PATCH",
+      const response =
+        await api(
+          "/api/auth/change-password",
+          {
+            method: "PATCH",
 
-          body: JSON.stringify({
-            currentPassword,
-            newPassword
-          })
-        }
-      );
+            body: JSON.stringify({
+              currentPassword,
+              newPassword
+            })
+          }
+        );
 
 
-      const data = await response.json();
+      const data =
+        await response.json();
 
 
       if (!response.ok) {
 
         passwordMessage.textContent =
           data.message ||
-          "Failed to change password";
+          "Failed to change password.";
+
+        submitBtn.disabled = false;
+
+        submitBtn.querySelector(
+          ".btn-label"
+        ).textContent =
+          "Change Password";
 
         return;
       }
@@ -430,22 +764,38 @@ passwordForm.addEventListener(
         data.message ||
         "Password changed successfully.";
 
+      submitBtn.querySelector(
+        ".btn-label"
+      ).textContent = "Changed";
 
       passwordForm.reset();
+
+
       setTimeout(() => {
-        window.location.href = "/login";
+
+        window.location.href =
+          "/login";
+
       }, 1000);
+
 
     } catch (error) {
 
       console.error(error);
 
       passwordMessage.textContent =
-        "Something went wrong.";
+        "Something went wrong. Please try again.";
+
+      submitBtn.disabled = false;
+
+      submitBtn.querySelector(
+        ".btn-label"
+      ).textContent =
+        "Change Password";
     }
+
   }
 );
-
 
 
 // ===============================
@@ -456,9 +806,10 @@ deleteAccountBtn.addEventListener(
   "click",
   async () => {
 
-    const confirmed = confirm(
-      "Are you sure you want to permanently delete your account?"
-    );
+    const confirmed =
+      confirm(
+        "Are you sure you want to permanently delete your account?"
+      );
 
 
     if (!confirmed) {
@@ -466,9 +817,10 @@ deleteAccountBtn.addEventListener(
     }
 
 
-    const secondConfirmation = confirm(
-      "This cannot be undone. Delete your account?"
-    );
+    const secondConfirmation =
+      confirm(
+        "This cannot be undone. Delete your account?"
+      );
 
 
     if (!secondConfirmation) {
@@ -476,25 +828,41 @@ deleteAccountBtn.addEventListener(
     }
 
 
+    deleteAccountBtn.disabled = true;
+
+    deleteAccountBtn.querySelector(
+      ".btn-label"
+    ).textContent = "Deleting...";
+
+
     try {
 
-      const response = await api(
-        "/api/auth/account",
-        {
-          method: "DELETE"
-        }
-      );
+      const response =
+        await api(
+          "/api/auth/account",
+          {
+            method: "DELETE"
+          }
+        );
 
 
-      const data = await response.json();
+      const data =
+        await response.json();
 
 
       if (!response.ok) {
 
         alert(
           data.message ||
-          "Failed to delete account"
+          "Failed to delete account."
         );
+
+        deleteAccountBtn.disabled = false;
+
+        deleteAccountBtn.querySelector(
+          ".btn-label"
+        ).textContent =
+          "Delete My Account";
 
         return;
       }
@@ -505,23 +873,36 @@ deleteAccountBtn.addEventListener(
       );
 
 
+      deleteAccountBtn.querySelector(
+        ".btn-label"
+      ).textContent = "Deleted";
+
+
       alert(
         data.message ||
         "Account deleted successfully."
       );
 
 
-      window.location.href =
-        "/";
+      window.location.href = "/";
+
 
     } catch (error) {
 
       console.error(error);
 
       alert(
-        "Something went wrong."
+        "Something went wrong. Please try again."
       );
+
+      deleteAccountBtn.disabled = false;
+
+      deleteAccountBtn.querySelector(
+        ".btn-label"
+      ).textContent =
+        "Delete My Account";
     }
+
   }
 );
 
@@ -534,8 +915,15 @@ logoutBtn.addEventListener(
   "click",
   async () => {
 
+    logoutBtn.disabled = true;
+
+    logoutBtn.querySelector(
+      ".btn-label"
+    ).textContent = "Logging out...";
+
+
     try {
- 
+
       await api(
         "/api/auth/logout",
         {
@@ -543,15 +931,24 @@ logoutBtn.addEventListener(
         }
       );
 
+    } catch (error) {
+
+      console.error(error);
+
     } finally {
 
       sessionStorage.removeItem(
         "accessToken"
       );
 
+      logoutBtn.querySelector(
+        ".btn-label"
+      ).textContent = "Logged out";
+
       window.location.href =
         "/";
     }
+
   }
 );
 

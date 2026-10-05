@@ -205,7 +205,12 @@ button {
   width: 100%;
 }
 
-#profileForm label, #profileForm input {
+#emailEditForm label, #emailEditForm input {
+  display: block;
+  width: 100%;
+}
+
+#usernameEditForm label, #usernameEditForm input {
   display: block;
   width: 100%;
 }

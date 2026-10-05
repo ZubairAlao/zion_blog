@@ -106,34 +106,109 @@
 
     <!-- UPDATE PROFILE -->
 
-    <section id="updateProfile" class="profile-section">
+<section id="updateProfile" class="profile-section">
 
-      <h2>Update Profile</h2>
+  <h2>Update Profile</h2>
 
-      <form class="form" id="usernameEditForm" style="margin: 10px 0;">
+  <!-- USERNAME -->
 
-        <div>
-          <label for="username">Username</label>
-          <input type="text" id="username" name="username" autocomplete="username" required>
-        </div>
+  <form class="form" id="usernameEditForm">
 
-        <button type="submit"><span class="icon" aria-hidden="true">💾</span> <span class="btn-label">Save Changes</span></button>
+    <div>
+      <label for="username">Username</label>
 
-      </form>
-      <form class="form" id="emailEditForm" style="margin: 0;">
+      <input
+        type="text"
+        id="username"
+        name="username"
+        autocomplete="username"
+        disabled
+        required
+      >
+    </div>
 
-        <div>
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" autocomplete="email" required>
-        </div>
+    <div class="form-actions">
+      <button
+        type="button"
+        id="editUsernameBtn"
+      >
+        <span class="icon" aria-hidden="true">✏️</span>
+        <span class="btn-label">Edit Username</span>
+      </button>
 
-        <button type="submit"><span class="icon" aria-hidden="true">💾</span> <span class="btn-label">Save Changes</span></button>
+      <button
+        type="submit"
+        id="saveUsernameBtn"
+        disabled
+      >
+        <span class="icon" aria-hidden="true">💾</span>
+        <span class="btn-label">Save Changes</span>
+      </button>
+    </div>
 
-      </form>
+  </form>
 
-      <p id="profileFormMessage" role="status"></p>
 
-    </section>
+  <!-- EMAIL -->
+
+  <form class="form" id="emailEditForm">
+
+    <div>
+      <label for="email">Email</label>
+
+      <input
+        type="email"
+        id="email"
+        name="email"
+        autocomplete="email"
+        disabled
+        required
+      >
+    </div>
+
+    <div>
+      <label for="emailCurrentPassword">
+        Current Password
+      </label>
+
+      <input
+        type="password"
+        id="emailCurrentPassword"
+        name="currentPassword"
+        autocomplete="current-password"
+        disabled
+        required
+      >
+    </div>
+
+    <span style="color: red;">*Make sure your new email is valid, this action irreversible!</span>
+
+    <div class="form-actions">
+
+      <button
+        type="button"
+        id="editEmailBtn"
+      >
+        <span class="icon" aria-hidden="true">✏️</span>
+        <span class="btn-label">Edit Email</span>
+      </button>
+
+      <button
+        type="submit"
+        id="saveEmailBtn"
+        disabled
+      >
+        <span class="icon" aria-hidden="true">💾</span>
+        <span class="btn-label">Save Changes</span>
+      </button>
+
+    </div>
+
+  </form>
+
+  <p id="profileFormMessage" role="status"></p>
+
+</section>
 
 
     <!-- EMAIL VERIFICATION -->
