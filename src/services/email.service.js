@@ -86,89 +86,118 @@
 //   });
 // }
 
-// resend
-import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+import * as brevo from "@getbrevo/brevo";
+
+const apiInstance = new brevo.TransactionalEmailsApi();
+
+apiInstance.setApiKey(
+  brevo.TransactionalEmailsApiApiKeys.apiKey,
+  process.env.BREVO_API_KEY
+);
 
 const sender = {
   name: process.env.EMAIL_FROM_NAME || "Zion Blog",
   email: process.env.EMAIL_FROM_ADDRESS
 };
 
+
+// Send verification email
 export async function sendVerificationEmail(email, token) {
   const url = `${process.env.APP_URL}/verify-email?token=${encodeURIComponent(token)}`;
 
-  const { data, error } = await resend.emails.send({
-    from: `${sender.name} <${sender.email}>`,
-    to: [email],
-    subject: "Verify Your Zion Blog Account",
-    html: `
-      <h1>Welcome to Zion Blog</h1>
+  const sendSmtpEmail = new brevo.SendSmtpEmail();
 
-      <p>
-        Thanks for creating your account.
-        Please verify your email address to activate your account.
-      </p>
+  sendSmtpEmail.subject = "Verify Your Zion Blog Account";
 
-      <p>
-        <a href="${url}">
-          Verify Your Email
-        </a>
-      </p>
+  sendSmtpEmail.sender = sender;
 
-      <p>
-        This verification link expires in 24 hours.
-      </p>
+  sendSmtpEmail.to = [
+    {
+      email
+    }
+  ];
 
-      <p>
-        If you did not create this account, you can safely ignore this email.
-      </p>
-    `
-  });
+  sendSmtpEmail.htmlContent = `
+    <h1>Welcome to Zion Blog</h1>
 
-  if (error) {
+    <p>
+      Thanks for creating your account.
+      Please verify your email address to activate your account.
+    </p>
+
+    <p>
+      <a href="${url}">
+        Verify Your Email
+      </a>
+    </p>
+
+    <p>
+      This verification link expires in 24 hours.
+    </p>
+
+    <p>
+      If you did not create this account, you can safely ignore this email.
+    </p>
+  `;
+
+  try {
+    const response = await apiInstance.sendTransacEmail(sendSmtpEmail);
+
+    console.log("Verification email sent:", response);
+  } catch (error) {
     console.error("Verification email failed:", error);
     throw new Error("Failed to send verification email");
   }
-
-  console.log("Verification email sent:", data?.id);
 }
 
+
+// Send password reset email
 export async function sendPasswordResetEmail(email, token) {
   const url = `${process.env.APP_URL}/reset-password?token=${encodeURIComponent(token)}`;
 
-  const { data, error } = await resend.emails.send({
-    from: `${sender.name} <${sender.email}>`,
-    to: [email],
-    subject: "Reset Your Zion Blog Password",
-    html: `
-      <h1>Reset Your Password</h1>
+  const sendSmtpEmail = new brevo.SendSmtpEmail();
 
-      <p>
-        We received a request to reset your Zion Blog password.
-      </p>
+  sendSmtpEmail.subject = "Reset Your Zion Blog Password";
 
-      <p>
-        <a href="${url}">
-          Reset Your Password
-        </a>
-      </p>
+  sendSmtpEmail.sender = sender;
 
-      <p>
-        This link expires in 15 minutes.
-      </p>
+  sendSmtpEmail.to = [
+    {
+      email
+    }
+  ];
 
-      <p>
-        If you did not request a password reset, you can safely ignore this email.
-      </p>
-    `
-  });
+  sendSmtpEmail.htmlContent = `
+    <h1>Reset Your Password</h1>
 
-  if (error) {
+    <p>
+      We received a request to reset your Zion Blog password.
+    </p>
+
+    <p>
+      <a href="${url}">
+        Reset Your Password
+      </a>
+    </p>
+
+    <p>
+      This link expires in 15 minutes.
+    </p>
+
+    <p>
+      If you did not request a password reset,
+      you can safely ignore this email.
+    </p>
+  `;
+
+  try {
+    const response = await apiInstance.sendTransacEmail(sendSmtpEmail);
+
+    console.log("Password reset email sent:", response);
+  } catch (error) {
     console.error("Password reset email failed:", error);
     throw new Error("Failed to send password reset email");
   }
-
-  console.log("Password reset email sent:", data?.id);
 }
+
