@@ -14,8 +14,7 @@ createCommentForm?.addEventListener("submit", async (event) => {
     const data = Object.fromEntries(new FormData(createCommentForm));
 
     try {
-      const params = new URLSearchParams(window.location.search);
-      const slug = params.get("slug");
+      const slug = window.location.pathname.split("/").filter(Boolean).pop();
   
       if (!slug) {
         throw new Error("Post not found.");

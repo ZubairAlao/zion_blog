@@ -3,6 +3,8 @@ import { api } from "./api.js";
 const editPostForm = document.querySelector("#edit-post-form");
 const editPostMessage = document.querySelector("#editPostMessage");
 const editPostBtn = document.querySelector("#editPostBtn");
+const CancelEditBtn = document.querySelector("#CancelEditBtn");
+
   
 async function renderSinglePost() {    
     try {  
@@ -41,8 +43,7 @@ editPostForm?.addEventListener("submit", async (event) => {
 
     const data = Object.fromEntries(new FormData(editPostForm));
 
-    const params = new URLSearchParams(window.location.search);
-    const slug = params.get("slug");
+    const slug = window.location.pathname.split("/").filter(Boolean).pop();
 
     if (!slug) {
         throw new Error("Post not found.");
@@ -76,7 +77,7 @@ editPostForm?.addEventListener("submit", async (event) => {
       return;
     }
 
-    window.location.href = `/post?slug=${result.slug}`
+    window.location.href = `/post/${result.slug}`
   } catch (error) {
     console.error(error);
     editPostMessage.textContent = "Something went wrong. Please try again.";
@@ -84,5 +85,9 @@ editPostForm?.addEventListener("submit", async (event) => {
     editPostBtn.textContent = "Submit Post";
   }
 });
+
+CancelEditBtn.addEventListener("click", async (e) => {
+  history.back()
+} )
 
 renderSinglePost()
