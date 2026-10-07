@@ -158,7 +158,6 @@ export async function renderSinglePost() {
 
               return `
                 <article class="comment-card">
-
                   <div>
 
                     <div class="post-meta">

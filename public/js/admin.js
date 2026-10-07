@@ -26,37 +26,41 @@ function makeRow(cells, actionButton = null) {
   return row;
 }
 
-async function loadAdmin() {
+// async function loadAdmin() {
 
-  try {
-    const response =
-      await api("/api/users/me");
+//   try {
+//     const response =
+//       await api("/api/users/me");
 
-    const data =
-      await response.json();
-
-
-    if (!response.ok) {
-
-      if (response.status === 401) {
-        window.location.href = "./login";
-        return;
-      }
-
-      throw new Error(
-        data.message ||
-        "Failed to load profile"
-      );
-    }
+//     const data = await response.json();
 
 
-    headerUsername.textContent = data.username;
+//     if (!response.ok) {
 
-  } catch (error) {
+//       if (response.status === 401) {
+//         window.location.href = "./login";
+//         return;
+//       }
 
-    console.error(error);
-  }
-}
+//       throw new Error(
+//         data.message ||
+//         "Failed to load profile"
+//       );
+//     }
+
+//     if(data.role !== "ADMIN") {
+//       document.getElementById("adminPage").textContent= "This is ADMIN PAGE" 
+//       history.back()
+//     }
+
+//     headerUsername.textContent = data.username;
+   
+
+//   } catch (error) {
+
+//     console.error(error);
+//   }
+// }
 
 async function loadUsers() {
   try {
@@ -65,7 +69,8 @@ async function loadUsers() {
     if (!response.ok) {
       throw new Error("Failed to load users");
     }
-
+   
+    
     const users = await response.json();
 
     usersTable.innerHTML = "";
@@ -310,7 +315,44 @@ logoutBtn.addEventListener("click", async () => {
 });
 
 
-loadUsers();
-loadPosts();
-loadComments();
-loadAdmin()
+const adminPage = document.querySelector("#adminPage");
+
+async function checkAdmin() {
+  try {
+    const response = await api("/api/users/me");
+
+    if (response.status === 401) {
+      window.location.replace("/login");
+      return false;
+    }
+
+    const data = await response.json();
+
+    if (!response.ok || data.role !== "ADMIN") {
+      window.location.replace("/profile");
+      return false;
+    }
+
+    headerUsername.textContent = data.username;
+    return true;
+
+  } catch (error) {
+    console.error(error);
+    window.location.replace("/profile");
+    return false;
+  }
+}
+
+async function init() {
+  const isAdmin = await checkAdmin();
+
+  if (!isAdmin) return;
+
+  adminPage.hidden = false;
+
+  loadUsers();
+  loadPosts();
+  loadComments();
+}
+
+init();

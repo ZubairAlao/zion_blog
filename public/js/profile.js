@@ -53,6 +53,8 @@ const deleteAccountBtn =
 const logoutBtn =
   document.querySelector("#logoutBtn");
 
+  const adminLink = document.querySelector("#adminLink")
+
 
 // ===============================
 // UTILITY FUNCTIONS
@@ -249,6 +251,11 @@ async function loadProfile() {
         data.message ||
         "Failed to load profile"
       );
+    }
+
+    
+    if(data.role === "ADMIN") {
+      adminLink.hidden =  false
     }
 
 
